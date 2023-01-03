@@ -37,27 +37,24 @@ Ensuite pour démarrer l'image on fait : `docker run ma_super_app`
 
 On complète le docker compose comme cela :
 ``` 
-version: '3.9'
-  services:
-    node:
-    image: ma_super_app
+version: '3.3'
+services:
+  node:
+    image: ma_super_app:1.0.0
     ports:
       - "3000:3000"
-    environment:
-      - DATABASE_URL=postgres://user:[email protected]:5432/ma_super_app
     links:
       - db
     depends_on:
       - db
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: ma_super_app
+      MYSQL_ROOT_PASSWORD: root
 
-    mysql:
-      image: mysql:5.7
-      ports:
-        - "5432:5432"
-      environment:
-        - POSTGRES_USER=user
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=ma_super_app
 ```
     
 Pour exécuter les services définis dans ce fichier, on utilise la commande `docker-compose up` dans le même répertoire que le fichier `docker-compose.yml`. Cela démarrera les deux services et les fera fonctionner en parallèle. On peut également utiliser la commande `docker-compose down` pour arrêter les services et supprimer les conteneurs.
